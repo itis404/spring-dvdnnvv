@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Обязательные тесты | Synchro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0">⚠️ Обязательные тесты</h3>
+        </div>
+        <div class="card-body">
+            <p>Для доступа к ленте необходимо пройти обязательные тесты на совместимость.</p>
+
+            <div th:if="${tests.isEmpty()}" class="alert alert-success">
+                Все обязательные тесты пройдены! <a th:href="@{/feed}">Перейти к ленте</a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3" th:each="test : ${tests}">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${test.name}">Название теста</h5>
+                            <p class="card-text" th:text="${test.description}">Описание</p>
+                            <a th:href="@{/tests/{id}(id=${test.id})}" class="btn btn-primary">Пройти тест</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

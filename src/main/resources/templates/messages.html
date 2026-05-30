@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Чаты | Synchro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <script src="/js/csrf.js"></script>
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0"> Чаты</h3>
+    </div>
+    <div class="card-body">
+      <div th:if="${chats.isEmpty()}" class="alert alert-info">
+        У вас пока нет чатов. Поставьте лайк или дождитесь взаимного лайка
+      </div>
+      <div th:each="chat : ${chats}" class="chat-list-item border rounded p-3 mb-2"
+           th:data-user-id="${chat.userId}"
+           th:data-username="${chat.username}">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong th:text="${chat.username}">Имя пользователя</strong>
+            <p class="text-muted mb-0 small" th:text="${chat.lastMessage}">Последнее сообщение</p>
+          </div>
+          <span th:if="${chat.unreadCount > 0}" class="unread-badge" th:text="${chat.unreadCount}">1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/messages.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

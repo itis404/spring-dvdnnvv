@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Лайки | Synchro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <script src="/js/csrf.js"></script>
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0"> Кто меня лайкнул</h3>
+    </div>
+    <div class="card-body">
+      <div th:if="${likes.isEmpty()}" class="alert alert-info">
+        Пока никто не поставил вам лайк
+      </div>
+      <div th:each="like : ${likes}" class="border rounded p-3 mb-2" th:id="'like-' + ${like.fromUser.id}">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong th:text="${like.fromUser.profile.username}">Имя</strong>
+            <span class="text-muted ms-2" th:text="${like.fromUser.email}">email</span>
+          </div>
+          <button class="btn btn-sm like-action-btn"
+                  th:data-user-id="${like.fromUser.id}"
+                  th:data-username="${like.fromUser.profile.username}">
+            Загрузка...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/likes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

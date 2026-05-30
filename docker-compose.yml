@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: synchro-db
+    environment:
+      POSTGRES_USER: synchro
+      POSTGRES_PASSWORD: synchro123
+      POSTGRES_DB: synchro_db
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - synchro-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: synchro-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - synchro-network
+
+  app:
+    build: .
+    container_name: synchro-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/synchro_db
+      SPRING_DATASOURCE_USERNAME: synchro
+      SPRING_DATASOURCE_PASSWORD: synchro123
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - synchro-network
+
+volumes:
+  postgres_data:
+
+networks:
+  synchro-network:
+    driver: bridge
