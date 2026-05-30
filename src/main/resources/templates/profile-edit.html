@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактирование профиля | Synchro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <script src="/js/csrf.js"></script>
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-5" style="max-width: 700px;">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">✏️ Редактирование профиля</h3>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/profile/edit}" method="post" enctype="multipart/form-data">
+
+        <!-- Текущее фото -->
+        <div class="text-center mb-3" th:if="${profile.photoUrl != null}">
+          <img th:src="${profile.photoUrl}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Фото профиля</label>
+          <input type="file" name="photo" class="form-control" accept="image/*">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Имя пользователя</label>
+          <input type="text" name="username" th:value="${profile.username}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Город</label>
+          <input type="text" name="city" th:value="${profile.city}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Дата рождения</label>
+          <input type="date" name="birthdate" th:value="${profile.birthdate}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Пол</label>
+          <select name="gender" class="form-select">
+            <option value="">Не указан</option>
+            <option value="male" th:selected="${profile.gender == 'male'}">Мужской</option>
+            <option value="female" th:selected="${profile.gender == 'female'}">Женский</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">О себе</label>
+          <textarea name="bio" class="form-control" rows="3" th:text="${profile.bio}"></textarea>
+        </div>
+
+        <hr>
+        <h5>Дополнительная информация</h5>
+
+        <div class="mb-3">
+          <label class="form-label">Цель знакомства</label>
+          <select name="goal" class="form-select">
+            <option value="">Не указано</option>
+            <option value="RELATIONSHIP" th:selected="${profile.goal == 'RELATIONSHIP'}">Отношения</option>
+            <option value="FRIENDSHIP" th:selected="${profile.goal == 'FRIENDSHIP'}">Дружба</option>
+            <option value="COMMUNICATION" th:selected="${profile.goal == 'COMMUNICATION'}">Общение</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Дети</label>
+          <select name="children" class="form-select">
+            <option value="">Не указано</option>
+            <option value="HAS" th:selected="${profile.children == 'HAS'}">Есть дети</option>
+            <option value="NO" th:selected="${profile.children == 'NO'}">Нет детей</option>
+            <option value="WANT" th:selected="${profile.children == 'WANT'}">Хочу детей</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Курение</label>
+          <select name="smoking" class="form-select">
+            <option value="">Не указано</option>
+            <option value="NEVER" th:selected="${profile.smoking == 'NEVER'}">Не курю</option>
+            <option value="SOMETIMES" th:selected="${profile.smoking == 'SOMETIMES'}">Иногда</option>
+            <option value="OFTEN" th:selected="${profile.smoking == 'OFTEN'}">Часто курю</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Алкоголь</label>
+          <select name="alcohol" class="form-select">
+            <option value="">Не указано</option>
+            <option value="NEVER" th:selected="${profile.alcohol == 'NEVER'}">Не пью</option>
+            <option value="SOMETIMES" th:selected="${profile.alcohol == 'SOMETIMES'}">Иногда</option>
+            <option value="OFTEN" th:selected="${profile.alcohol == 'OFTEN'}">Часто пью</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Интересы (можно выбрать несколько)</label>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="MUSIC" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('MUSIC')}">
+                <label class="form-check-label">🎵 Музыка</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="MOVIES" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('MOVIES')}">
+                <label class="form-check-label">🎬 Кино</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="SPORTS" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('SPORTS')}">
+                <label class="form-check-label">⚽ Спорт</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="BOOKS" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('BOOKS')}">
+                <label class="form-check-label">📚 Книги</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="TRAVEL" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('TRAVEL')}">
+                <label class="form-check-label">✈️ Путешествия</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="GAMES" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('GAMES')}">
+                <label class="form-check-label">🎮 Игры</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="COOKING" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('COOKING')}">
+                <label class="form-check-label">🍳 Готовка</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="PHOTO" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('PHOTO')}">
+                <label class="form-check-label">📷 Фотография</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" name="hobbies" value="ANIMALS" class="form-check-input"
+                       th:checked="${profile.hobbies.contains('ANIMALS')}">
+                <label class="form-check-label">🐱 Животные</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Любимый фильм -->
+        <hr>
+        <h5>🎬 Любимый фильм</h5>
+
+        <!-- Скрытые поля для выбранного фильма -->
+        <input type="hidden" name="favoriteMovieId" id="favoriteMovieId" th:value="${profile.favoriteMovie != null ? profile.favoriteMovie.id : ''}">
+        <input type="hidden" name="favoriteMovieTitle" id="favoriteMovieTitle" th:value="${profile.favoriteMovie != null ? profile.favoriteMovie.title : ''}">
+        <input type="hidden" name="favoriteMovieYear" id="favoriteMovieYear" th:value="${profile.favoriteMovie != null ? profile.favoriteMovie.year : ''}">
+        <input type="hidden" name="favoriteMoviePoster" id="favoriteMoviePoster" th:value="${profile.favoriteMovie != null ? profile.favoriteMovie.posterUrl : ''}">
+
+        <!-- Поле поиска -->
+        <div class="mb-3 position-relative">
+          <label class="form-label">Поиск фильма</label>
+          <input type="text" id="movieSearch" class="form-control" placeholder="Например: The Matrix">
+          <div class="form-text text-muted">
+            Вводите название фильма на английском языке
+          </div>
+          <div id="movieSuggestions" class="suggestions-dropdown"></div>
+        </div>
+
+        <!-- Контейнер для выбранного фильма (всегда есть) -->
+        <div id="selectedMovie" class="mb-3"></div>
+
+        <button type="submit" class="btn btn-primary">💾 Сохранить</button>
+        <a th:href="@{/profile}" class="btn btn-secondary">Отмена</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/profile-edit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

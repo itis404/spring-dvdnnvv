@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Header Fragment</title>
+  <script src="/js/csrf.js"></script>
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<nav th:fragment="header" class="navbar navbar-expand-lg bg-primary">
+  <div class="container">
+    <a class="navbar-brand text-white" href="/"> Synchro</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/feed"> Лента</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/tests"> Тесты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/likes"> Лайки</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/messages"> Чаты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/profile"> Профиль</a>
+        </li>
+        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+          <a class="nav-link text-warning" href="/admin/tests"> Админка</a>
+        </li>
+        <li class="nav-item position-relative">
+          <a class="nav-link text-white" href="/notifications" id="notificationBell">
+            🔔
+            <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px; display: none;">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-link nav-link text-white" style="border: none;"> Выйти</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script src="/js/header.js"></script>
+</body>
+</html>
